@@ -56,3 +56,17 @@ func Unidecode(s string) string {
 	}
 	return res
 }
+
+func UnidecodeRune(c rune) []rune {
+	decodingOnce.Do(decodeTransliterations)
+	if c <= unicode.MaxASCII {
+		return []rune{c}
+	}
+	if c > unicode.MaxRune || c > transCount {
+		return []rune{c}
+	}
+	if d := transliterations[c]; d != nil {
+		return d
+	}
+	return []rune{c}
+}
